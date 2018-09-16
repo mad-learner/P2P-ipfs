@@ -12,6 +12,12 @@
 </div>
 <input type="file" id="myimage"/><button onclick="addimage()">Add Image</button><br>
 <div id="imagehash"></div>
+<div>
+<h3>Load Image</h3>
+<input type="text" id="loadimage"/><button onclick="loadimage()">Load Image</button>
+<img src="" id="imageid"/>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/ipfs@0.31.7/dist/index.min.js"></script>
 <script>
     const node = new Ipfs({})
@@ -53,7 +59,17 @@
                 document.querySelector("#imagehash").innerHTML=res[0].hash
             })
         }
-        reader.readAsArrayBuffer(file)
+        reader.readAsArrayBuffer(file)    
+    }
+    function loadimage() {
+        let value = document.querySelector('#loadimage').value
+        node.files.get(value,(err, res) => {
+            console.log(res[0].content)
+            let blob = new Blob([res[0].content], {type : 'image/jpg'})
+            let imageUrl = URL.createObjectURL(blob)
+            document.querySelector('#imageid').src=imageUrl
+        }
+        )
         
     }
 
